@@ -1,0 +1,8 @@
+Appellancy API & Sample
+
+Using the API is incredibly easy. Just include the header, load Appellancy.dylib, initialize a face recognizer, and tada.
+You’ll need to create a delegate class object for Appellancy.
+
+Any problems or questions, don’t hesitate to ask!
+
+Code under WTFPL. No guarantees the sample actually works, although i have tested it.
