@@ -5,4 +5,16 @@ You’ll need to create a delegate class object for Appellancy.
 
 Any problems or questions, don’t hesitate to ask!
 
+As of 0.0.1-160, you can listen for accepted Notifications using CFNotificationCenter. this only makes sense if you are running a lock screen tweak of some sort.
+
+The events are:
+#define AFaceAccepted "com.efrederickson.appellancy.face_accepted"
+#define AFaceRejected "com.efrederickson.appellancy.face_rejected"
+
+And to listen, use:
+CFNotificationCenterRef r = CFNotificationCenterGetDarwinNotifyCenter();
+    CFNotificationCenterAddObserver(r, NULL, &face_accepted_notification, CFSTR("com.efrederickson.appellancy.face_accepted"), NULL, 0);
+And, of course, define the face_accepted_notification or whatever you need to do.
+
+
 Code under WTFPL. No guarantees the sample actually works, although i have tested it.
