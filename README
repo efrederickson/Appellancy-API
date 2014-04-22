@@ -2,8 +2,18 @@ Appellancy API & Sample
 
 Using the API is incredibly easy. Just include the header, load Appellancy.dylib, initialize a face recognizer, and tada.
 You’ll need to create a delegate class object for Appellancy.
+Copy from the example project here for ease of use.
 
 Any problems or questions, don’t hesitate to ask!
+
+——————————————————————————————————————————————————————————————————
+
+With the function 
+-(id) initWithImageView:(UIImageView*)imView;
+You can create a recognizer that shows the camera (what it “sees” in the ImageView)
+Allows for progress and stuff like that.
+
+——————————————————————————————————————————————————————————————————
 
 As of 0.0.1-160, you can listen for accepted Notifications using CFNotificationCenter. this only makes sense if you are running a lock screen tweak of some sort.
 
@@ -14,7 +24,9 @@ The events are:
 And to listen, use:
 CFNotificationCenterRef r = CFNotificationCenterGetDarwinNotifyCenter();
     CFNotificationCenterAddObserver(r, NULL, &face_accepted_notification, CFSTR("com.efrederickson.appellancy.face_accepted"), NULL, 0);
-And, of course, define the face_accepted_notification or whatever you need to do.
+And, of course, define the face_accepted_notification function or whatever you need to do.
+
+——————————————————————————————————————————————————————————————————
 
 
 Code under WTFPL. No guarantees the sample actually works, although i have tested it.

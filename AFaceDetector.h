@@ -1,4 +1,5 @@
 @interface AFaceDetector
+-(id) initWithImageView:(UIImageView*)imView;
 -(void) start;
 -(void) stop;
 -(BOOL) running;
