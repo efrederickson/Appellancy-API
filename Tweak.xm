@@ -23,6 +23,7 @@ static Sample *wat;
     // [self.passcodeController allowAccess];
     //[self stop]; // we don't want to keep running in the background! :O
     [[AFaceDetector sharedDetector] stop];
+    // We de-register ourself so we don't recieve extraneous notifications and updates when it isn't required and will (may) cause issues
     [[AFaceDetector sharedDetector] deregisterDelegate:self];
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Appellancy Test" message:@"Face accepted" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -32,6 +33,7 @@ static Sample *wat;
 
 -(void)faceRejected
 {
+    // only do this here if you don't want to wait for an acceptance (or you have some other method of authentication that will disable it)
     [[AFaceDetector sharedDetector] deregisterDelegate:self];
     [[AFaceDetector sharedDetector] stop];
 
@@ -56,13 +58,9 @@ static Sample *wat;
 
 %ctor
 {
-    // creation of the face recognizer will take a while. It is recommended to do it in the initializer 
-    //   (e.g. the %ctor like this is)
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        wat = [[Sample alloc] init];
-        //wat.passwordController = self;
+    wat = [[Sample alloc] init];
+    //wat.passwordController = self;
 
-        if([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.apple.springboard"])
-            [[%c(LAActivator) sharedInstance] registerListener:wat forName:@"com.efrederickson.appellancy-api-test-listener"];
-    });
+    if([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.apple.springboard"])
+        [[%c(LAActivator) sharedInstance] registerListener:wat forName:@"com.efrederickson.appellancy-api-test-listener"];
 }
