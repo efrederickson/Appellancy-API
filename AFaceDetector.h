@@ -1,9 +1,21 @@
-@interface AFaceDetector
--(id) initWithImageView:(UIImageView*)imView;
+@class UIImageView;
+
+@interface AFaceDetector : NSObject
+
++(AFaceDetector*) sharedDetector;
+
 -(void) start;
 -(void) stop;
 -(BOOL) running;
-@property (nonatomic, strong) id delegate;
+
+-(void) reloadDatabase;
+
+-(void) registerDelegate:(id)delegate;
+-(void) deregisterDelegate:(id)delegate;
+-(void) changeImageView:(UIImageView*)newImageView;
+
+-(void) reloadDatabase;
+
 @end
 
 @protocol AFaceDetectorProtocol

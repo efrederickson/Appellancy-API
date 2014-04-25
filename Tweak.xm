@@ -1,6 +1,4 @@
 #import "AFaceDetector.h"
-#import <dlfcn.h>
-#import <objc/runtime.h>
 #import <libactivator/libactivator.h>
 
 @interface Sample : NSObject <AFaceDetectorProtocol, LAListener>
@@ -9,7 +7,6 @@
 @end
 
 static Sample *wat;
-static AFaceDetector *detector;
 
 @implementation Sample
 -(void)faceRecognized:(NSString*)recognized confidence:(int)confidence
@@ -25,15 +22,19 @@ static AFaceDetector *detector;
     
     // [self.passcodeController allowAccess];
     //[self stop]; // we don't want to keep running in the background! :O
-    [detector stop];
+    [[AFaceDetector sharedDetector] stop];
+    [[AFaceDetector sharedDetector] deregisterDelegate:self];
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Appellancy Test" message:@"Face accepted" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
-    [alert release];
+    //NSLog(@"Appellancy sample: done.");
 }
 
 -(void)faceRejected
 {
+    [[AFaceDetector sharedDetector] deregisterDelegate:self];
+    [[AFaceDetector sharedDetector] stop];
+
     NSLog(@"Appellancy sample: face rejected");
     UIAlertView *error = [[UIAlertView alloc] initWithTitle:@"Appellancy Test" message:@"Face rejected" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [error show];
@@ -42,10 +43,11 @@ static AFaceDetector *detector;
 
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         // start the listener
-        // seems to cause a little lag when starting...
-    	[detector start];
+        NSLog(@"Appellancy sample: starting AFaceDetector");
+        [[AFaceDetector sharedDetector] registerDelegate:self];
+    	[[AFaceDetector sharedDetector] start];
     });
 
     [event setHandled:YES];
@@ -54,18 +56,11 @@ static AFaceDetector *detector;
 
 %ctor
 {
-    dlopen("/Library/MobileSubstrate/DynamicLibraries/Appelancy.dylib", RTLD_NOW);
-    // initialization of the face recognizer will take a while. It is recommended to do it in the initializer.
+    // creation of the face recognizer will take a while. It is recommended to do it in the initializer 
+    //   (e.g. the %ctor like this is)
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        // start a new face recognition object
-    	detector = [[objc_getClass("AFaceDetector") alloc] init];
-        
-        // set it up to a listener
         wat = [[Sample alloc] init];
         //wat.passwordController = self;
-
-        detector.delegate = wat;
 
         if([[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.apple.springboard"])
             [[%c(LAActivator) sharedInstance] registerListener:wat forName:@"com.efrederickson.appellancy-api-test-listener"];

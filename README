@@ -1,17 +1,18 @@
 Appellancy API & Sample
 
-Using the API is incredibly easy. Just include the header, load Appellancy.dylib, initialize a face recognizer, and tada.
+Using the API is incredibly easy. 
 You’ll need to create a delegate class object for Appellancy.
-Copy from the example project here for ease of use.
+Copy from the example project here for ease of use ;).
 
 Any problems or questions, don’t hesitate to ask!
 
 ——————————————————————————————————————————————————————————————————
+As of 0.0.2-1, the API has been re-written to use /usr/lib/libAppellancy.dylib instead of /Library/MobileSubstrate/DynamicLibraries/Appellancy.dylib.
+The notification system using CFNotificationCenter remains the same.
 
-With the function 
--(id) initWithImageView:(UIImageView*)imView;
-You can create a recognizer that shows the camera (what it “sees” in the ImageView)
-Allows for progress and stuff like that.
+To link with Appellancy use:
+    project_LIBRARIES += Appellancy
+and make sure that “libAppellancy.dylib” is in $THEOS/lib/
 
 ——————————————————————————————————————————————————————————————————
 
@@ -23,7 +24,7 @@ The events are:
 
 And to listen, use:
 CFNotificationCenterRef r = CFNotificationCenterGetDarwinNotifyCenter();
-    CFNotificationCenterAddObserver(r, NULL, &face_accepted_notification, CFSTR("com.efrederickson.appellancy.face_accepted"), NULL, 0);
+    CFNotificationCenterAddObserver(r, NULL, &face_accepted_notification, CFSTR(AFaceAccepted), NULL, 0);
 And, of course, define the face_accepted_notification function or whatever you need to do.
 
 ——————————————————————————————————————————————————————————————————
