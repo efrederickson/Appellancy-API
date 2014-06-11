@@ -4,6 +4,8 @@ Using the API is incredibly easy.
 You’ll need to create a delegate class object for Appellancy.
 Copy from the example project here for ease of use ;).
 
+It looks for $THEOS to build from so make sure that is set up correctly.
+
 Any problems or questions, don’t hesitate to ask!
 
 ——————————————————————————————————————————————————————————————————
